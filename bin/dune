@@ -1,0 +1,4 @@
+(executable
+ (public_name game-boy-emulator)
+ (name main)
+ (libraries emulator))
