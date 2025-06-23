@@ -1,10 +1,10 @@
 module MemoryBus = struct
     type t = {
-        mutable memory: int list;
+        mutable memory: int array;
     }
 
     let read_byte bus address =
-        List.nth bus.memory address
+        bus.memory.(address)
     ;;   
 end
 
@@ -32,7 +32,7 @@ let init () =
             h = 0;
             l = 0;
         };
-        bus = { memory = [] };
+        bus = { memory = Array.make 0xFFFF 0 };
         pc = 0;
         sp = 0;
     }

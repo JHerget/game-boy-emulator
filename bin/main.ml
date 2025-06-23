@@ -9,11 +9,11 @@ let () =
 
 let () =
     print_endline "";
-    cpu.bus.memory <- [0x06; 0x2C; 0x1E; 0xA7];
+    cpu.bus.memory <- [| 0x06; 0x2C; 0x1E; 0xA7 |];
     
     let rec run () =
         match cpu.pc with
-        | pc when pc < List.length cpu.bus.memory ->
+        | pc when pc < Array.length cpu.bus.memory ->
             let opcode = Cpu.MemoryBus.read_byte cpu.bus cpu.pc in
             cpu.pc <- cpu.pc + 1;
 
