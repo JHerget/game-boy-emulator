@@ -8,15 +8,19 @@ let () =
     Rom.print_header rom
 
 let () =
-    Printf.printf "\nPC: %d\n" cpu.pc;
-    Printf.printf "%s\n" @@ Registers.to_string cpu.registers;
+    print_endline "";
+    cpu.bus.memory <- [0x06; 0x2C; 0x1E; 0xA7];
     
-    cpu.bus.memory <- [0x06; 0x2C];
-    
-    let opcode = Cpu.MemoryBus.read_byte cpu.bus cpu.pc in
-    cpu.pc <- cpu.pc + 1;
+    let rec run () =
+        match cpu.pc with
+        | pc when pc < List.length cpu.bus.memory ->
+            let opcode = Cpu.MemoryBus.read_byte cpu.bus cpu.pc in
+            cpu.pc <- cpu.pc + 1;
 
-    Cpu.execute cpu @@ Instruction.from_byte opcode;
-
-    Printf.printf "PC: %d\n" cpu.pc;
-    Printf.printf "%s\n" @@ Registers.to_string cpu.registers;
+            Cpu.execute cpu @@ Instruction.from_byte opcode;
+            run ()
+        | _ ->
+            Printf.printf "PC: %d\n" cpu.pc;
+            Printf.printf "%s\n" @@ Registers.to_string cpu.registers
+    in
+    run ();
